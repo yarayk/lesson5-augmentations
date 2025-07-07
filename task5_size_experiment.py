@@ -13,8 +13,7 @@ def measure(size, dataset, num_samples=100):
 
     proc = psutil.Process(os.getpid())
 
-    # Сбор памяти и времени
-    mem_before = proc.memory_info().rss / 1024**2  # MB
+    mem_before = proc.memory_info().rss / 1024**2  
     t0 = time.time()
 
     for i in range(min(num_samples, len(dataset.images))):
@@ -42,8 +41,6 @@ def main():
         mems.append(m)
 
     os.makedirs('results', exist_ok=True)
-
-    # График времени
     plt.figure()
     plt.plot(sizes, times, marker='o')
     plt.title("Время обработки 100 изображений")
@@ -51,8 +48,6 @@ def main():
     plt.ylabel("Время (сек)")
     plt.grid(True)
     plt.savefig('results/time_vs_size.png')
-
-    # График памяти
     plt.figure()
     plt.plot(sizes, mems, marker='o', color='orange')
     plt.title("Изменение памяти при обработке")
@@ -61,7 +56,7 @@ def main():
     plt.grid(True)
     plt.savefig('results/memory_vs_size.png')
 
-    print("\n✅ Графики сохранены в `results/`")
+    print("\n Графики сохранены в `results/`")
 
 if __name__ == "__main__":
     main()

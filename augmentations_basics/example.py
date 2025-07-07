@@ -9,7 +9,7 @@ from extra_augs import (
     AddGaussianNoise, RandomErasingCustom, CutOut,
     Solarize, Posterize, AutoContrast, ElasticTransform
 )
-from  standard_augs import get_standard_transforms
+from standard_augs import get_standard_transforms
 
 # Загрузка датасета без аугментаций
 root = '../data/train'

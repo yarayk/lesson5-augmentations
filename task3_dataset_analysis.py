@@ -23,19 +23,16 @@ def main():
                 widths.append(w)
                 heights.append(h)
 
-    # 1. Подсчёт по классам
-    print("📦 Количество изображений по классам:")
+    print("Количество изображений по классам:")
     for cls, cnt in class_counts.items():
         print(f"{cls}: {cnt}")
 
-    # 2. Мин/макс/среднее размеры
     widths_arr = np.array(widths)
     heights_arr = np.array(heights)
-    print("\n📐 Размеры изображений (ширина x высота):")
+    print("\n Размеры изображений (ширина x высота):")
     print(f"Ширина — min: {widths_arr.min()}, max: {widths_arr.max()}, avg: {widths_arr.mean():.1f}")
     print(f"Высота — min: {heights_arr.min()}, max: {heights_arr.max()}, avg: {heights_arr.mean():.1f}")
 
-    # 3. Визуализация
     os.makedirs('results', exist_ok=True)
 
     plt.figure(figsize=(8,5))
@@ -61,7 +58,7 @@ def main():
     plt.savefig('results/counts_per_class.png')
     plt.close()
 
-    print("\n✅ Графики сохранены в папке `results/`")
+    print("\n Графики сохранены в папке `results/`")
 
 if __name__ == "__main__":
     main()

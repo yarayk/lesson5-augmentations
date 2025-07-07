@@ -3,9 +3,8 @@ import torch
 from torchvision import transforms
 from datasets import CustomImageDataset
 from utils import show_single_augmentation, show_images
-from extra_augs import AddGaussianNoise, CutOut  # пример готовых
+from extra_augs import AddGaussianNoise, CutOut 
 
-# 1. Random Gaussian Blur
 class RandomGaussianBlur:
     def __init__(self, kernel_size=(5,5), sigma=(0.1,2.0), p=0.5):
         self.p = p
@@ -13,7 +12,6 @@ class RandomGaussianBlur:
     def __call__(self, img):
         return self.blur(img) if random.random() < self.p else img
 
-# 2. Random Perspective
 class RandomPerspectiveTransform:
     def __init__(self, distortion_scale=0.5, p=0.5):
         self.p = p
@@ -21,7 +19,6 @@ class RandomPerspectiveTransform:
     def __call__(self, img):
         return self.persp(img) if random.random() < self.p else img
 
-# 3. Random Brightness-Contrast
 class RandomBrightnessContrast:
     def __init__(self, brightness=0.5, contrast=0.5, p=0.5):
         self.p = p
@@ -45,7 +42,6 @@ def main():
         "RandomBrightnessContrast": RandomBrightnessContrast(p=1.0)
     }
 
-    # Готовые для сравнения
     from extra_augs import AddGaussianNoise, CutOut
     ready_augs = {
         "AddGaussianNoise": AddGaussianNoise(mean=0., std=0.1),
@@ -57,17 +53,14 @@ def main():
         orig = to_tensor(img)
         show_single_augmentation(orig, orig, "Оригинал")
 
-        # Кастомные
         for name, aug in custom_augs.items():
             aug_img = transforms.ToTensor()(aug(img))
             show_single_augmentation(orig, aug_img, name)
 
-        # Готовые
         for name, aug in ready_augs.items():
             aug_img = aug(orig.clone())
             show_single_augmentation(orig, aug_img, name)
 
-    # Визуализация всех кастомных сразу
     for name, aug in custom_augs.items():
         imgs = [transforms.ToTensor()(aug(img)) for img, _ in samples]
         show_images(imgs, title=name + " – 5 примеров")

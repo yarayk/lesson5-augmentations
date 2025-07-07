@@ -14,7 +14,6 @@ class AugmentationPipeline:
         self.augs.pop(name, None)
 
     def apply(self, img: Image.Image) -> torch.Tensor:
-        # Последовательно применяем все аугментации с ToTensor() в конце
         ts = transforms.Compose(list(self.augs.values()) + [transforms.ToTensor()])
         return ts(img)
 
@@ -34,14 +33,11 @@ def process_profile(name, pipeline: AugmentationPipeline, input_dir='data/train'
             if not fname.lower().endswith(('.jpg', '.png', 'jpeg')):
                 continue
             img = Image.open(os.path.join(cls_in, fname)).convert('RGB')
-            out_t = pipeline.apply(img)  # тензор (C,H,W)
-
-            # Сохраняем назад в PIL, затем в файл
+            out_t = pipeline.apply(img) 
             pil = transforms.ToPILImage()(out_t)
             pil.save(os.path.join(cls_out, fname))
 
 if __name__ == '__main__':
-    # Конфигурации
     light = AugmentationPipeline()
     light.add_augmentation('flip', transforms.RandomHorizontalFlip(p=0.5))
 
@@ -57,7 +53,6 @@ if __name__ == '__main__':
     heavy.add_augmentation('rotate', transforms.RandomRotation(30))
     heavy.add_augmentation('gray', transforms.RandomGrayscale(p=0.2))
 
-    # Применяем и сохраняем
     for name, pipeline in [('light', light), ('medium', medium), ('heavy', heavy)]:
         print(f"Processing profile '{name}', augs:", pipeline.get_augmentations())
         process_profile(name, pipeline)
